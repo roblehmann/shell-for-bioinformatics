@@ -22,7 +22,7 @@ In bioinformatics application the shell is most commonly used in combination wit
 <img src="img/schema.png"  width="50%" height="50%" >
 
 - [**Fundamental Skills in Bioinformatics Course**](kaust.edu.sa)
-- [**Shell tutorial**](gitlab.kaust.edu.sa/lehmanr/shell-for-bioinformatics)
+- [**Shell tutorial**](https://github.com/roblehmann/shell-for-bioinformatics)
 - [**Snakemake tutorial**](https://github.com/roblehmann/snakemake-tutorial)
 
 ## A bit of nomenclature
