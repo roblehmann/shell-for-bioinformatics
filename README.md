@@ -11,6 +11,7 @@ This is a brief introduction on how to use the UNIX Shell and perform tasks on t
 - [Little Diversion: Download this tutorial to your machine](little-diversion-download-this-tutorial-to-your-machine)
 - [Pipes and Filters](#pipes-and-filters)
 - [Shell Scripts](#shell-scripts)
+- [IBEX](#ibex)
 - [Resources](#resources)
 
 ## Introduction
@@ -312,6 +313,24 @@ Note that the contents of a compressed file are not human-readable anymore, i.e.
 $ cat dircontent.txt.gz
 $ zcat dircontent.txt.gz
 ```
+### Finding text in files
+
+A frequent task in bioinformatics is to find occurrences of a certain string in a file or set of files. With the program grep Unix provides a very power tool for this. ‘grep’ is short for ‘global/regular expression/print’ and works like this in its simplest form: `grep <string> <filename>`
+We can use it for example to find all genes with a "CA" in their name in the gene list `data/genes.txt`:
+
+```
+$ grep 'CA' data/genes.txt
+CACNA1A
+CAT
+CACNA1A
+CACNA1A
+```
+
+grep offers a few useful options:
+   `-n` add line numbers or occurrences;
+   `-w` look for complete words;
+   `-i` ignore cases;
+   `-v` invert search result.
 
 ## Little Diversion: Download this tutorial to your machine
 
@@ -325,6 +344,31 @@ $ ls -l
 ```
 
 Notice the data folder containing some files we will have a look at in the rest of this tutorial.
+
+### Loops
+
+Loops are very useful tools to reliably execute operations even for large numbers of files or data in general. There are several loop types availabe, here we will focus on the for loop with its general structure:
+
+```
+$ for variable_name in var_values 
+  do 
+    command1 $variable_name 
+    command2 $variable_name
+    …
+  done  
+```
+So far we have not encountered variables. In bash, variables are assigned using just their name, i.e., `var='some_text'`, but when refering to the variable later we need too use a leading $, i.e., `$var`. In the ocntext of a loop, we need to use a variable to distinguish what needs to be done in each iteration of the loop. As example, we can navigate to the tutorial folder we have just cloned on our local file system and iterate over the names of all files in the data folder with the extension ".fq.gz" to print them to the screen:
+
+```
+$ for f in data/*.fq.gz 
+  do 
+    echo $f 
+  done
+data/SRR2627019.1m.10xR1.fq.gz
+data/SRR2627019.1m.10xR2.fq.gz
+data/SRR2627019.1m.20xR1.fq.gz
+data/SRR2627019.1m.20xR2.fq.gz
+```
 
 ## Pipes and Filters
 
@@ -435,7 +479,73 @@ $ sort data/genes.txt | uniq -c | sort -nr
 
 The possibility of combining multiple filters (programs like wc, sort, uniq, ...) via pipes (`|`) to build pipelines is what makes the shell such a valuable tool for bioinformatics as it allows to build very complex pipelines in a efficient and easy way.
 
+
+
+
 From here on, you just need to read up on more filter programs to extend your toolkit for data analysis and manipulation in the shell. Most notable are the following programs: [grep](https://www.gnu.org/software/grep/manual/grep.html), [cut](https://man7.org/linux/man-pages/man1/cut.1.html), [awk](https://github.com/onetrueawk/awk), [bioawk](https://github.com/lh3/bioawk), [sed](https://www.gnu.org/software/sed/manual/sed.html).
+
+### awk
+
+awk is an interpreted programming language designed specifically to effiently process delimited text. Many data formats in Bioinformatics are delimited: bed, gff/gtf, wiggle, DEG tables in pipelines, and many more. In general, awk processes files according to the following steps:
+1. iterates over file line by line 
+2. input line split into fields using the defined delimiter
+3. input line fields are compared to pattern 
+4. matching lines are processed
+
+The awk command is structured like this, optionally redirecting the output to a file:
+
+```
+awk options 'BEGIN{first action} selection_criteria {action}END{last action}' input_file > output_file
+```
+
+Blocks are defined with curly brackets, with the BEGIN block being executed only once at the beginning before processing the input file, and the END block after processing the input file. The selection criteria can be used to subset the lines of the input file, e.g. comparing numbers of searching to certain strings.
+
+Consider our example from above counting the occurrences of a gene in a gene list:
+```
+$ sort data/genes.txt | uniq -c | sort -nr
+   4 IGF1
+   3 CACNA1A
+   2 HTRA2
+   1 HDAC2
+   1 GHRHR
+   1 EMD
+   1 EGF
+   1 CETP
+   1 CAT
+   1 C1QA
+   1 ADCY5
+   1 A2M
+```
+We can use awk to turn turn this slightly awkward format into a nice table, and filter it in the process. Let's say we are only interested in genes occurring more than 2 times:
+
+```
+$ sort data/genes.txt | uniq -c | sort -nr | awk '$1>2 {print}'
+   4 IGF1
+   3 CACNA1A
+```
+
+Next, we want to move the gene name into the first column and the count in the second column, note that we are changing the delimiter to a tab space:
+
+```
+$ sort data/genes.txt | uniq -c | sort -nr | awk '$1>2 {print $2"\t"$1}'
+IGF1	4
+CACNA1A	3
+```
+
+And finally a header line with column names, e.g. to parse the data into R later:
+```
+$ sort data/genes.txt | uniq -c | sort -nr | awk 'BEGIN{print "Gene\tCount"} $1>2 {print $2"\t"$1}'
+Gene	Count
+IGF1	4
+CACNA1A	3
+```
+
+A common task in to count the number of reads in a fastq file, this can also be done in a quick and convenient way using awk:
+
+```
+$ zcat data/SRR2627019.1m.10xR1.fq.gz | awk '{s++}END{print s/4}'
+17894
+```
 
 ## IBEX
 
