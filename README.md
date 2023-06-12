@@ -269,6 +269,7 @@ $ dirname ~/Projects/shell-for-bioinformatics/data/SRR2627019.1m.10xR1.fq.gz
 $ basename ~/Projects/shell-for-bioinformatics/data/SRR2627019.1m.10xR1.fq.gz
 /Users/lehmanr/Projects/shell-for-bioinformatics/data/SRR2627019.1m.10xR1.fq.gz
 ```
+### Parameter expansion
 
 Dealing with file path strings often requires manipulating substrings, e.g. replacing extensions or adding sample names. Bash provides several functions for this purpose.
 
@@ -286,10 +287,16 @@ SRR26270_9._m._0xR_.fq.gz
 Conventiently, we can also use wildcards in string, e.g. to remove everything in the file name following the dot:
 
 ```
-$ echo ${f/.*}
+$ echo ${f%%.*}
 SRR2627019
 ```
+In general: 
 
+`${inputString} - access variable`
+`${inputString/pattern/replacement}` - replace substring
+`${inputString%%.*}` - remove longest matching suffix
+`${inputString##.*}` - remove longest matching prefix
+`${inputString:offset:length}` - extract by position
 
 ### Inspecting files with head, tail, cat, and less
 
