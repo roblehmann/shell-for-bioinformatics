@@ -246,6 +246,51 @@ $ ls -l
 
 The `*` is only one of many wildcards. Another wildcard character similar to the `*` is the questionmark `?`, which matches any single character. To expand on this topic have a look at one of the many source, e.g. [O'Reilly's Unix Power Tools](https://docstore.mik.ua/orelly/unix/upt/ch15_01.htm).
 
+### File and Directory names and paths
+
+Bash provides several convenient functions to manipulate file and directory names and paths.
+
+`basename` - extract file/dir name from full path
+
+```
+$ basename ~/Projects/shell-for-bioinformatics/data/SRR2627019.1m.10xR1.fq.gz
+SRR2627019.1m.10xR1.fq.gz
+```
+
+`dirname` - extract path, remove file/dir name
+
+```
+$ dirname ~/Projects/shell-for-bioinformatics/data/SRR2627019.1m.10xR1.fq.gz
+/Users/lehmanr/Projects/shell-for-bioinformatics/data
+```
+
+`realpath` - obtain full path to file/dir
+```
+$ basename ~/Projects/shell-for-bioinformatics/data/SRR2627019.1m.10xR1.fq.gz
+/Users/lehmanr/Projects/shell-for-bioinformatics/data/SRR2627019.1m.10xR1.fq.gz
+```
+
+Dealing with file path strings often requires manipulating substrings, e.g. replacing extensions or adding sample names. Bash provides several functions for this purpose.
+
+`${inputString/pattern/replacement}` - replace the first occurrence of pattern in the inputString with the replacement. E.g, alter this fastq's file name to fit the standard:
+```
+$ f='SRR2627019.1m.10xR1.fq.gz'
+$ echo ${f/fq/fastq}
+SRR2627019.1m.10xR1.fastq.gz
+```
+`${inputString//pattern/replacement}` - replaces all occurrences of pattern
+```
+$ echo ${f//1/_}
+SRR26270_9._m._0xR_.fq.gz
+```
+Conventiently, we can also use wildcards in string, e.g. to remove everything in the file name following the dot:
+
+```
+$ echo ${f/.*}
+SRR2627019
+```
+
+
 ### Inspecting files with head, tail, cat, and less
 
 We just made two files, but how do we look at them? Let's explore a few of the many ways.
