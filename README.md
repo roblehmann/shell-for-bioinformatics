@@ -9,6 +9,7 @@ This is a brief introduction on how to use the UNIX Shell and perform tasks on t
 - [Navigating Files and Directories](#navigating-files-and-directories)
 - [Working With Files and Directories](#working-with-files-and-directories)
 - [Little Diversion: Download this tutorial to your machine](little-diversion-download-this-tutorial-to-your-machine)
+- [Loops](#loops)
 - [Pipes and Filters](#pipes-and-filters)
 - [Shell Scripts](#shell-scripts)
 - [IBEX](#ibex)
@@ -397,7 +398,7 @@ $ ls -l
 
 Notice the data folder containing some files we will have a look at in the rest of this tutorial.
 
-### Loops
+## Loops
 
 Loops are very useful tools to reliably execute operations even for large numbers of files or data in general. There are several loop types availabe, here we will focus on the for loop with its general structure:
 
