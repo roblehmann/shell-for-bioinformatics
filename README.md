@@ -385,13 +385,13 @@ grep offers a few useful options:
    `-i` ignore cases;
    `-v` invert search result.
 
-## Little Diversion: Download this tutorial to your machine
+## Little Detour: Download this tutorial to your machine
 
 Now that we have learned to access and use the shell for navigation, we can use it to download this tutorial to use some prepared files for further steps. The one requirement is that you have the version management system **git** installed. Follow the [installation guide](https://github.com/git-guides/install-git) for your operating system if you haven't done so already. Now let's download the code onto our Desktop:
 
 ```
 $ cd ~/Desktop
-$ git clone https://gitlab.kaust.edu.sa/lehmanr/shell-for-bioinformatics
+$ git clone https://github.com/roblehmann/shell-for-bioinformatics
 $ cd shell-for-bioinformatics
 $ ls -l
 ```
